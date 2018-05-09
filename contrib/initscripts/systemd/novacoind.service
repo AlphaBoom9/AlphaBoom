@@ -1,0 +1,11 @@
+[Unit]
+Description=AlphaBoom daemon serivce
+After=network.target
+
+[Service]
+Type=simple
+User=AlphaBoom
+ExecStart=/opt/AlphaBoom/AlphaBoomd
+
+[Install]
+WantedBy=multi-user.target

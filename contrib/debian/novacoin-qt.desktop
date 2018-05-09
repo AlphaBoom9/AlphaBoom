@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=AlphaBoom
+Comment=AlphaBoom P2P Cryptocurrency
+Comment[ru]=AlphaBoom, P2P криптовалюта
+Comment[fr]=AlphaBoom, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=AlphaBoom, eşten eşe kriptografik sanal para birimi
+Exec=/usr/bin/AlphaBoom-qt
+Terminal=false
+Type=Application
+Icon=/usr/share/pixmaps/AlphaBoom80.xpm
+MimeType=x-scheme-handler/AlphaBoom;
+Categories=Office;

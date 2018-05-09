@@ -1,0 +1,5 @@
+AlphaBoom-qt usr/bin
+share/pixmaps/AlphaBoom32.xpm usr/share/pixmaps
+share/pixmaps/AlphaBoom80.xpm usr/share/pixmaps
+debian/AlphaBoom-qt.desktop usr/share/applications
+debian/AlphaBoom-qt.protocol usr/share/kde4/services/

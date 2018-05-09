@@ -1,0 +1,68 @@
+#!/bin/sh
+
+# PROVIDE: AlphaBoom
+# REQUIRE: LOGIN
+# KEYWORD: shutdown
+
+#
+# Add the following lines to /etc/rc.conf.local or /etc/rc.conf
+# to enable this service:
+#
+# AlphaBoom_enable (bool): Set to NO by default. Set this variable to YES if you want to enable AlphaBoom service.
+# AlphaBoom_config (path): Set to /usr/local/etc/AlphaBoom.conf by default.
+# AlphaBoom_user:  The user account AlphaBoom daemon runs as. It uses 'root' user by default.
+# AlphaBoom_group: The group account AlphaBoom daemon runs as. It uses 'wheel' group by default.
+# AlphaBoom_datadir (str): Default to "/var/db/AlphaBoom". Base data directory.
+
+. /etc/rc.subr
+
+name=AlphaBoom
+rcvar=AlphaBoom_enable
+
+: ${AlphaBoom_enable:=NO}
+: ${AlphaBoom_config=/usr/local/etc/AlphaBoom.conf}
+: ${AlphaBoom_datadir=/var/db/AlphaBoom}
+: ${AlphaBoom_user="root"}
+: ${AlphaBoom_group="wheel"}
+
+required_files=${AlphaBoom_config}
+command=/usr/local/bin/AlphaBoomd
+AlphaBoom_chdir=${AlphaBoom_datadir}
+pidfile="${AlphaBoom_datadir}/AlphaBoomd.pid"
+stop_cmd=AlphaBoom_stop
+command_args="-conf=${AlphaBoom_config} -datadir=${AlphaBoom_datadir} -daemon -pid=${pidfile}"
+start_precmd="${name}_prestart"
+
+AlphaBoom_create_datadir()
+{
+	echo "Creating data directory"
+	eval mkdir -p ${AlphaBoom_datadir}
+	[ $? -eq 0 ] && chown -R ${AlphaBoom_user}:${AlphaBoom_group} ${AlphaBoom_datadir}
+}
+
+AlphaBoom_prestart()
+{
+	if [ ! -d "${AlphaBoom_datadir}/." ]; then
+		AlphaBoom_create_datadir || return 1
+	fi
+}
+
+AlphaBoom_requirepidfile()
+{
+	if [ ! "0`check_pidfile ${pidfile} ${command}`" -gt 1 ]; then
+		echo "${name} not running? (check $pidfile)."
+		exit 1
+	fi
+}
+
+AlphaBoom_stop()
+{
+    AlphaBoom_requirepidfile
+
+	echo "Stopping ${name}."
+	eval ${command} -conf=${AlphaBoom_config} -datadir=${AlphaBoom_datadir} stop
+	wait_for_pids ${rc_pid}
+}
+
+load_rc_config $name
+run_rc_command "$1"

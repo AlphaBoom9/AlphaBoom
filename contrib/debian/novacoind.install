@@ -1,0 +1,2 @@
+debian/bin/AlphaBoomd usr/bin
+src/AlphaBoomd usr/lib/AlphaBoom
